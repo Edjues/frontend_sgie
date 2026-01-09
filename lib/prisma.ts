@@ -1,42 +1,23 @@
-/*import { PrismaClient } from '../generated/prisma/client'
-
-const prismaClientSingleton = () => new PrismaClient()
-
-declare global {
-  var prisma: undefined | ReturnType<typeof prismaClientSingleton>
-}
-
-const prisma = globalThis.prisma ?? prismaClientSingleton()
-
-export default prisma
-
-if (process.env.NODE_ENV !== 'production') globalThis.prisma = prisma
-import { PrismaClient } from '../generated/prisma/client'
-
-const prisma = new PrismaClient({
-  datasourceUrl: process.env.DATABASE_URL, // Aquí va la URL de Pooling
-})
-
-export default prisma 
-
-import { Pool } from 'pg'
+import { PrismaClient } from '@/generated/prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient } from '../generated/prisma/client' // Importa desde tu carpeta generada
+import pg from 'pg'
 
-const prismaClientSingleton = () => {
-  // Configuración del pool para Supabase (Usa DATABASE_URL de pooling)
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-  const adapter = new PrismaPg(pool)
-  return new PrismaClient({ adapter })
+
+const globalForPrisma = global as unknown as {
+  prisma: PrismaClient;
+};
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  } })
+const adapter = new PrismaPg(pool)
+
+ const prisma =
+  globalForPrisma.prisma ||
+  new PrismaClient({adapter });
+
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
 }
 
-declare global {
-  var prisma: undefined | ReturnType<typeof prismaClientSingleton>
-}
-
-const prisma = globalThis.prisma ?? prismaClientSingleton()
-
-export default prisma
-
-if (process.env.NODE_ENV !== 'production') globalThis.prisma = prisma
-*/
+export default prisma;
