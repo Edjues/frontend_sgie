@@ -1,20 +1,70 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import Prisma from "./prisma";
-
-// import { PrismaClient } from "../generated/prisma/client";
-// const prisma = new PrismaClient({} as any);
-
+import prisma from "./prisma";
 
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
 
-  database: prismaAdapter(Prisma, {
+  database: prismaAdapter(prisma, {
         provider: "postgresql", // or "mysql", "postgresql", ...etc
   }),
-  advanced: {
-    useSecureCookies: process.env.NODE_ENV === "production"
+
+  rateLimit: { enabled: false },
+  
+  socialProviders: {
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    },
   },
+
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          try {
+            const prisma = (await import("./prisma")).default; // Importación dinámica para evitar errores de entorno
+
+            const adminRole = await prisma.rol.findUnique({
+              where: { descripcion: "ADMIN" },
+            });
+
+            if (adminRole) {
+              await prisma.usuario.create({
+                data: {
+                  nombrecompleto: user.name || "Usuario de GitHub",
+                  email: user.email,
+                  rolid: adminRole.id,
+                  estado: true
+                },
+              });
+              console.log("Sincronización exitosa en tabla usuario");
+            }
+          } catch (e) {
+            console.error("Error sincronizando tabla usuario:", e);
+          }
+        },
+      },
+    },
+  
+  },
+
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 días en segundos
+    updateAge: 60 * 60 * 24, // Actualizar cada 24 horas
+      cookie: {
+        // Configuración de cookies
+        sameSite: "lax",
+        strategy: "database",
+        secure: process.env.NODE_ENV === "production", // HTTPS en producción
+      },
+  },
+  
+  advanced: {
+    // Use secure cookies only in production (allow http during local development)
+    useSecureCookies: process.env.NODE_ENV === "production",
+  },
+
   secret: process.env.AUTH_SECRET!, // Obligatorio: mínimo 32 caracteres
   trustedOrigins: process.env.NEXTAUTH_URL 
     ? [process.env.NEXTAUTH_URL] 
@@ -29,39 +79,5 @@ export const auth = betterAuth({
     },
   },
 
-  socialProviders: {
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-    },
-  },
-  user: {
-    additionalFields: {
-      role: {
-        type: "string",
-        values: ["USER", "ADMIN"],
-        default: "ADMIN", // IMPORTANTE: Todos nuevos usuarios son ADMIN
-      },
-      name: {
-        type: "string",
-        required: false,
-      },
-      phone: {
-        type: "string",
-        required: false,
-      },
-    },
-  },
-  
-  session: {
-  expiresIn: 60 * 60 * 24 * 7, // 7 días en segundos
-  updateAge: 60 * 60 * 24, // Actualizar cada 24 horas
-    cookie: {
-      // Configuración de cookies
-      sameSite: "lax",
-      strategy: "database",
-      secure: process.env.NODE_ENV === "production", // HTTPS en producción
-    },
-  },
 })
 
