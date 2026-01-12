@@ -45,7 +45,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prisma";
 import { withAuth } from "@/lib/with-auth";
-import { id } from "zod/v4/locales";
 
 
 export default withAuth(async function handler(req: NextApiRequest, res: NextApiResponse, session: any) {
@@ -66,8 +65,9 @@ export default withAuth(async function handler(req: NextApiRequest, res: NextApi
       //     }
       //   }
       // });
-      const transacciones = await prisma.transaccion.findMany({
-          orderBy: { fecha: "desc" },
+      const transacciones = await prisma.transaccion
+      .findMany({
+          orderBy: { id: "desc" },
       });
       const data = JSON.parse(
         JSON.stringify(transacciones, (key, value) =>
