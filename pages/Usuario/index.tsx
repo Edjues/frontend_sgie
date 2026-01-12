@@ -59,7 +59,7 @@ function compare(a: any, b: any) {
   return Number(a) - Number(b);
 }
 
-export default function Dashboard() {
+export default function usuario() {
   const { data: session } = authClient.useSession();
 
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
