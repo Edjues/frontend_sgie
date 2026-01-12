@@ -86,6 +86,7 @@ export const auth = betterAuth({
   // --- CONFIGURACIÓN DE ORIGENES DE CONFIANZA ---
   trustedOrigins: [
     "http://localhost:3000",
+     process.env.FRONTEND_URL || "",
     "https://sgie-three.vercel.app",
     "https://sgie-q9h9c4sbx-edjues-projects.vercel.app" // Tu dominio de Vercel actual
   ],
