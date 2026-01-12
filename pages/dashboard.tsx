@@ -3,8 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
-import { Wallet, Settings, LogOut, TrendingUp, TrendingDown, LayoutDashboard } from "lucide-react";
+import { Wallet, Settings, LogOut, TrendingUp, TrendingDown, LayoutDashboard, UserCog, Notebook } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+
+import Link from "next/link"
+
 
 // import { Sidebar } from "@/components/Sidebar";
 
@@ -34,13 +37,13 @@ export default function Dashboard() {
             <LayoutDashboard size={20} /> Dashboard
           </Button>
           <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white">
-            <TrendingUp size={20} /> Sistema de gestión I&E 
+            <Link href="/gestionI&E"><TrendingUp size={20} /> Sistema de gestión I&E </Link>
           </Button>
           <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white">
-            <TrendingUp size={20} />  Gestión de usuarios
+            <Link href="/usuario"><UserCog size={20} />  Gestión de usuarios</Link>
           </Button>
           <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white">
-            <TrendingDown size={20} /> Reporte
+            <Link href="/reporte"><Notebook size={20} /> Reporte</Link>
           </Button>
         </nav>
       </aside>
