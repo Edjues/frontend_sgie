@@ -54,5 +54,5 @@ export default withAuth(async function handler(req: NextApiRequest, res: NextApi
     console.error("Error en API transaccion:", error);
     return res.status(500).json({ error: "Error interno al procesar transacciones" });
   }
-}, "ADMIN");
+},  ["ADMIN", "USER"]);
 

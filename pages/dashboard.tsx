@@ -81,6 +81,8 @@ function formatDate(iso: string) {
 }
 
 export default function Movimientos() {
+  const { data: session } = authClient.useSession();
+  
   const { user, loading: loadingAuth } = useAuth();
 
   // ✅ ÚNICO estado para usuario DB
@@ -277,7 +279,7 @@ export default function Movimientos() {
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col md:flex-row">
       <div className="md:sticky md:top-0 md:h-screen md:w-[280px]">
-        <Sidebar userRole={"ADMIN"} />
+        <Sidebar userRole={(session?.user as any)?.role ?? "USER"} />
       </div>
 
       <main className="flex-1 p-4 sm:p-6 md:p-8">

@@ -9,6 +9,20 @@ export const auth = betterAuth({
         provider: "postgresql", // or "mysql", "postgresql", ...etc
   }),
 
+  user:{
+    additionalFields:{
+      role: {
+        type: "string",
+        defaultValue: "USER",
+        input: true,
+      },
+      phone: {
+        type: "string",
+        input: true,
+      }
+    }
+  },
+  additionalFields: ["role", "phone"] ,
   rateLimit: { enabled: false },
   
   socialProviders: {
@@ -17,7 +31,7 @@ export const auth = betterAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     },
   },
-
+ 
   databaseHooks: {
     user: {
       create: {
@@ -58,6 +72,7 @@ export const auth = betterAuth({
         strategy: "database",
         secure: process.env.NODE_ENV === "production", // HTTPS en producción
       },
+      
   },
   
   advanced: {
@@ -79,7 +94,7 @@ export const auth = betterAuth({
       userAlreadyExists: "Ya existe un usuario con este email",
     },
   },
-
+  
 })
 
 export type Session = typeof auth.$Infer.Session;

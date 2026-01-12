@@ -6,11 +6,13 @@ import { cn } from "@/lib/utils";
 import { MENU_ITEMS } from "@/lib/menu-config";
 
 interface SidebarProps {
-  userRole: string;
+  userRole?: string | null;
 }
 
 export function Sidebar({ userRole }: SidebarProps) {
   const router = useRouter();
+
+
 
   return (
     <aside className="w-64 border-r border-slate-800 hidden md:flex flex-col p-6 h-screen sticky top-0 bg-slate-950">
@@ -21,7 +23,7 @@ export function Sidebar({ userRole }: SidebarProps) {
       <nav className="space-y-2 flex-1">
         {MENU_ITEMS.map((item) => {
           // Lógica de Validación de Rol
-          if (!item.roles.includes(userRole)) return null;
+          if (!userRole || !item.roles.includes(userRole)) return null;
 
           const isActive = router.pathname === item.href;
 

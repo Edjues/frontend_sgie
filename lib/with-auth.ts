@@ -2,9 +2,9 @@ import { auth } from "@/lib/auth";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "./prisma";
 
-export const withAuth = (handler: any, requiredRole?: string) => {
+export const withAuth = (handler: any, requiredRole?: string | string[] ) => {
 
-    return async (req: NextApiRequest, res: NextApiResponse) => {
+  return async (req: NextApiRequest, res: NextApiResponse) => {
     let session: any
     try {
       // Normalizar headers a un objeto plano string->string
@@ -32,8 +32,18 @@ export const withAuth = (handler: any, requiredRole?: string) => {
         include: { rol: true }
       });
 
-      if (dbUser?.rol?.descripcion !== requiredRole) {
-        return res.status(403).json({ error: "No autorizado para este rol" });
+      const userRole = dbUser?.rol?.descripcion;
+
+      if (Array.isArray(requiredRole)) {
+        // Si es un array, el rol del usuario debe estar incluido en el array
+        if (!userRole || !requiredRole.includes(userRole)) {
+          return res.status(403).json({ error: "No autorizado. Se requiere uno de estos roles: " + requiredRole.join(", ") });
+        }
+      } else {
+        // Si es un string único, validación normal
+        if (userRole !== requiredRole) {
+          return res.status(403).json({ error: `No autorizado. Se requiere el rol ${requiredRole}` });
+        }
       }
     }
 

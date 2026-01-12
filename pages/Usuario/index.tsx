@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LogOut, Pencil, ArrowUpDown, X, Save } from "lucide-react";
 
+
 type Usuario = {
   id: number;
   rolid: 1 | 2;
@@ -155,12 +156,15 @@ export default function Dashboard() {
     }
   }
 
+  
+
   return (
     // ✅ De row fijo -> columna en móvil y fila en md+
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col md:flex-row">
       {/* ✅ Sidebar no “empuja” en móvil; si tu Sidebar es ancho fijo, esto ayuda */}
       <div className="md:sticky md:top-0 md:h-screen md:w-[280px]">
-        <Sidebar userRole={"ADMIN"} />
+        <Sidebar userRole={(session?.user as any)?.role ?? "USER"} />
+        
       </div>
 
       {/* ✅ Menos padding en móvil */}
