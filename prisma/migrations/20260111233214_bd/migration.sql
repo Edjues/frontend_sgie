@@ -1,11 +1,11 @@
 -- CreateTable
-CREATE TABLE "permiso" (
-    "id" SERIAL NOT NULL,
-    "codigo" TEXT NOT NULL,
-    "descripcion" TEXT NOT NULL,
+-- CREATE TABLE "permiso" (
+--     "id" SERIAL NOT NULL,
+--     "codigo" TEXT NOT NULL,
+--     "descripcion" TEXT NOT NULL,
 
-    CONSTRAINT "permiso_pkey" PRIMARY KEY ("id")
-);
+--     CONSTRAINT "permiso_pkey" PRIMARY KEY ("id")
+-- );
 
 -- CreateTable
 CREATE TABLE "rol" (
@@ -16,13 +16,13 @@ CREATE TABLE "rol" (
 );
 
 -- CreateTable
-CREATE TABLE "rolpermiso" (
-    "id" SERIAL NOT NULL,
-    "rolId" INTEGER NOT NULL,
-    "permisoId" INTEGER NOT NULL,
+-- CREATE TABLE "rolpermiso" (
+--     "id" SERIAL NOT NULL,
+--     "rolId" INTEGER NOT NULL,
+--     "permisoId" INTEGER NOT NULL,
 
-    CONSTRAINT "rolpermiso_pkey" PRIMARY KEY ("id")
-);
+--     CONSTRAINT "rolpermiso_pkey" PRIMARY KEY ("id")
+-- );
 
 -- CreateTable
 CREATE TABLE "transaccion" (
@@ -113,7 +113,7 @@ CREATE TABLE "verification" (
 CREATE UNIQUE INDEX "rol_descripcion_key" ON "rol"("descripcion");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "rolpermiso_rolId_permisoId_key" ON "rolpermiso"("rolId", "permisoId");
+-- CREATE UNIQUE INDEX "rolpermiso_rolId_permisoId_key" ON "rolpermiso"("rolId", "permisoId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "usuario_email_key" ON "usuario"("email");

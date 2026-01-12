@@ -67,6 +67,7 @@ export default withAuth(async function handler(req: NextApiRequest, res: NextApi
       // });
       const transacciones = await prisma.transaccion
       .findMany({
+          take: 10, 
           orderBy: { id: "desc" },
       });
       const data = JSON.parse(
