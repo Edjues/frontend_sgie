@@ -34,10 +34,13 @@ export default function Dashboard() {
             <LayoutDashboard size={20} /> Dashboard
           </Button>
           <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white">
-            <TrendingUp size={20} /> Ingresos
+            <TrendingUp size={20} /> Sistema de gestión de ingresos y gastos 
           </Button>
           <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white">
-            <TrendingDown size={20} /> Egresos
+            <TrendingUp size={20} /> Sistema de gestión de ingresos y gastos 
+          </Button>
+          <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white">
+            <TrendingDown size={20} /> Gestión de usuarios
           </Button>
         </nav>
       </aside>

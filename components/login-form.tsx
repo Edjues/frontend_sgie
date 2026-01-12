@@ -14,9 +14,9 @@ import { Separator } from "@/components/ui/separator"
 import { authClient } from "@/lib/auth-client" // Tu cliente de Better Auth
 
 export function LoginForm() {
-  const handleSocialLogin = async (provider: "github") => {
+  const handleSocialLogin = async () => {
     await authClient.signIn.social({
-      provider,
+      provider: "github",
       callbackURL: "/dashboard",
     })
   }
@@ -59,7 +59,7 @@ export function LoginForm() {
           <Button 
             variant="outline" 
             className="w-full bg-white" 
-            onClick={() => handleSocialLogin("github")}
+            onClick={() => handleSocialLogin()}
           >
             {/* Puedes usar un icono de Lucide-react aquí */}
             Acceder con GitHub
