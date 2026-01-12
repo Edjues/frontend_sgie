@@ -15,7 +15,7 @@ export const MENU_ITEMS = [
   // },
   {
     title: "Gestión de usuarios",
-    href: "/usuario",
+    href: "/Usuario",
     icon: UserCog,
     roles: ["ADMIN"],
   },
