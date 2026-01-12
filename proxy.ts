@@ -6,7 +6,7 @@ export async function proxy(request: NextRequest) {
     const session = await auth.api.getSession({ headers: request.headers });
     const { pathname } = request.nextUrl;
 
-    const rutasPrivadas = ["/dashboard", "/admin", "/perfil", "/ajustes"];
+    const rutasPrivadas = ["/dashboard", "/admin", "/usuario", "/reportes", "/gestionI&E"];
     const esRutaPrivada = rutasPrivadas.some(ruta => pathname.startsWith(ruta));
 
     // Si no hay sesión y va a una ruta privada

@@ -72,6 +72,7 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
+    autoSignIn: true,
     requireEmailVerification: false, // Cambiar a true en producción
     errorMessages: {
       invalidCredentials: "Email o contraseña incorrectos",
@@ -81,3 +82,5 @@ export const auth = betterAuth({
 
 })
 
+export type Session = typeof auth.$Infer.Session;
+export type User = typeof auth.$Infer.Session.user;

@@ -1,5 +1,6 @@
+import { useState } from "react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,14 +12,42 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Github } from "lucide-react"; // Importa iconos de Lucide
+import { Github, Loader2, Lock, Mail } from "lucide-react"; // Importa iconos de Lucide
 import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleSocialLogin = async () => {
     await authClient.signIn.social({
       provider: "github",
       callbackURL: "/dashboard",
+    });
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const { data, error: authError } = await authClient.signIn.email({
+      email,
+      password,
+      callbackURL: "/dashboard", // A donde ir tras éxito
+    }, {
+      onRequest: () => setLoading(true),
+      onError: (ctx) => {
+        setError(ctx.error.message || "Credenciales incorrectas");
+        setLoading(false);
+      },
+      onSuccess: () => {
+        router.push("/dashboard");
+      }
     });
   };
 
@@ -27,14 +56,19 @@ export default function LoginPage() {
       <Card className="mx-auto max-w-sm border-slate-800 bg-slate-900/50 backdrop-blur-sm text-slate-100 shadow-2xl">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold tracking-tight">
-            Bienvenido de nuevo
+            Iniciar Sesión
           </CardTitle>
           <CardDescription className="text-slate-400">
-            Ingresa tus credenciales para acceder a tu panel financiero.
+            Ingresa tus credenciales para acceder a tu cuenta.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="grid gap-4">
+          <form onSubmit={handleLogin} className="grid gap-4">
+            {error && (
+              <div className="bg-red-500/10 border border-red-500 text-red-500 p-3 rounded-md text-xs text-center">
+                {error}
+              </div>
+            )}
             <div className="grid gap-2">
               <Label htmlFor="email" className="text-slate-300">
                 Correo Electrónico
@@ -44,6 +78,8 @@ export default function LoginPage() {
                 type="email"
                 placeholder="m@ejemplo.com"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-blue-600"
               />
             </div>
@@ -63,11 +99,19 @@ export default function LoginPage() {
                 id="password"
                 type="password"
                 required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="bg-slate-950 border-slate-800 text-white focus-visible:ring-blue-600"
               />
             </div>
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all">
-              Entrar al Sistema
+            <Button 
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all">
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                "Entrar"
+              )}
             </Button>
 
             <div className="relative my-2">

@@ -17,6 +17,7 @@ model rol {
 
 model transaccion {
   id        Int      @id @default(autoincrement())
+  concepto  String?
   monto     Decimal  @db.Decimal(18, 2)
   tipo      String
   fecha     DateTime @default(now()) @db.Timestamptz(6)
