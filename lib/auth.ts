@@ -6,7 +6,7 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
 
   database: prismaAdapter(prisma, {
-        provider: "postgresql", // or "mysql", "postgresql", ...etc
+        provider: "postgresql",
   }),
 
   user:{
@@ -37,8 +37,7 @@ export const auth = betterAuth({
       create: {
         after: async (user) => {
           try {
-            const prisma = (await import("./prisma")).default; // Importación dinámica para evitar errores de entorno
-
+            const prisma = (await import("./prisma")).default;
             const adminRole = await prisma.rol.findUnique({
               where: { descripcion: "ADMIN" },
             });
@@ -60,41 +59,46 @@ export const auth = betterAuth({
         },
       },
     },
-  
   },
 
   session: {
-    expiresIn: 60 * 60 * 24 * 7, // 7 días en segundos
-    updateAge: 60 * 60 * 24, // Actualizar cada 24 horas
-      cookie: {
-        // Configuración de cookies
-        sameSite: "lax",
-        strategy: "database",
-        secure: process.env.NODE_ENV === "production", // HTTPS en producción
-      },
-      
+    expiresIn: 60 * 60 * 24 * 7,
+    updateAge: 60 * 60 * 24,
+    cookie: {
+      // Para CORS en 2026, si los dominios son distintos, 'none' es necesario
+      // pero requiere HTTPS obligatorio (secure: true).
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      strategy: "database",
+      secure: process.env.NODE_ENV === "production",
+    },
   },
   
   advanced: {
-    // Use secure cookies only in production (allow http during local development)
     useSecureCookies: process.env.NODE_ENV === "production",
+    // --- CAMBIOS PARA CORS ---
+    crossOriginCookies: {
+      enabled: true, // Permite que las cookies se compartan entre subdominios/dominios de Vercel
+    }
   },
 
-  secret: process.env.AUTH_SECRET!, // Obligatorio: mínimo 32 caracteres
-  trustedOrigins: process.env.NEXTAUTH_URL 
-    ? [process.env.NEXTAUTH_URL] 
-    : ["http://localhost:3000"],
+  secret: process.env.AUTH_SECRET!,
+
+  // --- CONFIGURACIÓN DE ORIGENES DE CONFIANZA ---
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://sgie-three.vercel.app",
+    "https://sgie-q9h9c4sbx-edjues-projects.vercel.app" // Tu dominio de Vercel actual
+  ],
 
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
-    requireEmailVerification: false, // Cambiar a true en producción
+    requireEmailVerification: false,
     errorMessages: {
       invalidCredentials: "Email o contraseña incorrectos",
       userAlreadyExists: "Ya existe un usuario con este email",
     },
   },
-  
 })
 
 export type Session = typeof auth.$Infer.Session;
