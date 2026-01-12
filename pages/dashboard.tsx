@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { LogOut, ArrowUpDown, Plus, X, Save } from "lucide-react";
-import { useAuth } from "./hooks/useAuth"; // ✅ ajusta si tu ruta cambia
+import { useAuth } from "@/hooks/useAuth"; // ✅ ajusta si tu ruta cambia
 
 type ApiTransaccion = {
   id: number;

@@ -1,7 +1,64 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prisma";
 import { withAuth } from "@/lib/with-auth";
-
+/**
+ * @openapi
+ * /api/usuarios/{id}:
+ *   put:
+ *     summary: Actualizar un usuario existente
+ *     description: Actualiza el nombre y el rol de un usuario tanto en la tabla 'usuario' como en la tabla de autenticación. Requiere permisos de administrador.
+ *     tags:
+ *       - Usuarios
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID numérico del usuario a editar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombrecompleto
+ *               - rolid
+ *             properties:
+ *               nombrecompleto:
+ *                 type: string
+ *                 example: "Juan Pérez"
+ *               rolid:
+ *                 type: integer
+ *                 example: 2
+ *     responses:
+ *       '200':
+ *         description: Usuario actualizado con éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/Usuario'
+ *       '400':
+ *         description: Error de validación o conflicto (ej. email en uso)
+ *       '401':
+ *         description: No autenticado
+ *       '403':
+ *         description: No autorizado (Se requiere rol ADMIN)
+ *       '404':
+ *         description: Usuario no encontrado
+ *       '405':
+ *         description: Método no permitido
+ *       '500':
+ *         description: Error interno del servidor
+ */
 export default withAuth(async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query; // ID de la tabla 'usuario' (Int)
 

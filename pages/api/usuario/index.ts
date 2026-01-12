@@ -1,3 +1,43 @@
+/**
+ * @openapi
+ * /api/usuario:
+ *   get:
+ *     summary: Obtener lista de usuarios
+ *     tags:
+ *       - Usuario
+ *     responses:
+ *       '200':
+ *         description: Lista de usuarios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Usuario'
+ *   post:
+ *     summary: Crear un usuario
+ *     tags:
+ *       - Usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UsuarioInput'
+ *     responses:
+ *       '201':
+ *         description: Usuario creado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Usuario'
+ *       '400':
+ *         description: Error de validación
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prisma";
 import { withAuth } from "@/lib/with-auth";

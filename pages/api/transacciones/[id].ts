@@ -1,3 +1,29 @@
+/**
+ * @openapi
+ * /api/transacciones/{id}:
+ *   get:
+ *     summary: Obtener transacciones de un usuario por ID
+ *     tags:
+ *       - Transacciones
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del usuario
+ *     responses:
+ *       '200':
+ *         description: Lista de transacciones del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Transaccion'
+ *       '404':
+ *         $ref: '#/components/schemas/ErrorResponse'
+ */
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prisma";
 import { withAuth } from "@/lib/with-auth";

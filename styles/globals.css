@@ -136,3 +136,25 @@ body {
     @apply bg-background text-foreground;
   }
 }
+/* Estilos para modernizar Swagger */
+.swagger-ui {
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* Cambiar el color principal (ejemplo a un violeta moderno) */
+.swagger-ui .topbar { display: none; } /* Ocultar barra negra fea */
+
+.swagger-ui .info .title {
+  color: #3b82f6; /* Azul Tailwind */
+}
+
+/* Botones y métodos con bordes redondeados */
+.swagger-ui .opblock {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+/* Colores de los métodos */
+.swagger-ui .opblock.opblock-get { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+.swagger-ui .opblock.opblock-post { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
+.swagger-ui .opblock.opblock-put { border-color: #f59e0b; background: rgba(245, 158, 11, 0.1); }

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { authClient } from "../../lib/auth-client";
+import { authClient } from "../lib/auth-client";
 import type { User } from "better-auth";
 
 type SessionResult =

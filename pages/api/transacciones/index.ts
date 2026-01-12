@@ -1,3 +1,47 @@
+/**
+ * @openapi
+ * /api/transacciones:
+ *   get:
+ *     summary: Obtener lista de transacciones
+ *     tags:
+ *       - Transacciones
+ *     responses:
+ *       '200':
+ *         description: Lista de transacciones
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Transaccion'
+ *   post:
+ *     summary: Crear una nueva transacción
+ *     tags:
+ *       - Transacciones
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [monto, tipo, usuarioId]
+ *             properties:
+ *               monto:
+ *                 type: number
+ *               tipo:
+ *                 type: string
+ *               usuarioId:
+ *                 type: integer
+ *     responses:
+ *       '201':
+ *         description: Transacción creada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Transaccion'
+ *       '400':
+ *         $ref: '#/components/schemas/ErrorResponse'
+ */
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prisma";
 import { withAuth } from "@/lib/with-auth";

@@ -1,3 +1,45 @@
+/**
+ * @openapi
+ * /api/reportes:
+ *   get:
+ *     summary: Obtener lista de transacciones (reportes)
+ *     tags:
+ *       - Reportes
+ *     responses:
+ *       '200':
+ *         description: Lista de transacciones ordenadas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Transaccion'
+ *   post:
+ *     summary: Crear una transacción
+ *     tags:
+ *       - Reportes
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [monto, tipo]
+ *             properties:
+ *               monto:
+ *                 type: number
+ *               tipo:
+ *                 type: string
+ *     responses:
+ *       '201':
+ *         description: Transacción creada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Transaccion'
+ *       '400':
+ *         $ref: '#/components/schemas/ErrorResponse'
+ */
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prisma";
 import { withAuth } from "@/lib/with-auth";
