@@ -38,7 +38,7 @@ type SortDir = "asc" | "desc";
 
 const ROLE_LABEL: Record<number, string> = {
   1: "ADMIN",
-  2: "USUARIO",
+  2: "USER",
 };
 
 function compare(a: any, b: any) {
@@ -335,7 +335,7 @@ export default function Dashboard() {
                                   className="h-10 rounded-md bg-slate-950/40 border border-slate-800 px-3 text-slate-100"
                                 >
                                   <option value={1}>ADMIN</option>
-                                  <option value={2}>USUARIO</option>
+                                  <option value={2}>USER</option>
                                 </select>
                               ) : (
                                 <span className="px-2 py-1 rounded-md bg-slate-800/60">

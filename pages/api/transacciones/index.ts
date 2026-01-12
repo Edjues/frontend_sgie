@@ -33,9 +33,9 @@ export default withAuth(async function handler(req: NextApiRequest, res: NextApi
 
     // 3. Crear una nueva transacción
     if (req.method === "POST") {
-      const { monto, tipo } = req.body;
+      const { monto, tipo , usuarioId} = req.body;
 
-      if (!monto || !tipo) {
+      if (!monto || !tipo || !usuarioId) {
         return res.status(400).json({ error: "Faltan campos obligatorios" });
       }
 
@@ -43,8 +43,7 @@ export default withAuth(async function handler(req: NextApiRequest, res: NextApi
         data: {
           monto: monto,
           tipo: tipo,
-          // Usamos el ID del usuario que viene de la sesión (tabla 'usuario')
-          usuarioId: session.dbUser.id, 
+          usuarioId: usuarioId, 
         },
       });
 

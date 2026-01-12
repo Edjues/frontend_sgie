@@ -35,7 +35,7 @@ export default withAuth(async function handler(req: NextApiRequest, res: NextApi
         where: { email: usuarioActual.email },
         data: {
           name: nombrecompleto,
-          role: updatedUsuario.rol?.descripcion || "ADMIN", 
+          role: updatedUsuario.rol?.descripcion , 
         },
       });
 

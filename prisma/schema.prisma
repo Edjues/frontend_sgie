@@ -8,29 +8,12 @@ datasource db {
   provider = "postgresql"
 }
 
-model permiso {
-  id          Int          @id @default(autoincrement())
-  codigo      String
-  descripcion String
-  rolpermiso  rolpermiso[]
-}
-
 model rol {
   id          Int          @id @default(autoincrement())
   descripcion String       @unique
-  rolpermiso  rolpermiso[]
   usuario     usuario[]
 }
 
-model rolpermiso {
-  id        Int     @id @default(autoincrement())
-  rolId     Int
-  permisoId Int
-  permiso   permiso @relation(fields: [permisoId], references: [id])
-  rol       rol     @relation(fields: [rolId], references: [id])
-
-  @@unique([rolId, permisoId])
-}
 
 model transaccion {
   id        Int      @id @default(autoincrement())
