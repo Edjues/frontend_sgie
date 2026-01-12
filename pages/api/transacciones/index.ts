@@ -69,38 +69,13 @@ export default withAuth(async function handler(req: NextApiRequest, res: NextApi
       const transacciones = await prisma.transaccion.findMany({
           orderBy: { fecha: "desc" },
       });
-      
-     const uniqueUserIds = [...new Set(transacciones.map(t => t.usuarioId))];
-
-// 3. Consultar los detalles específicos de esos usuarios
-const usuarios = await prisma.usuario.findMany({
-    where: { id: { in: uniqueUserIds } },
-    select: { id: true, nombrecompleto: true, email: true },
-});
-
-// 4. Mapear los resultados para combinar la información
-const dataConDetalles = transacciones.map(transaccion => {
-    // Encontrar el usuario correspondiente a esta transacción
-    const usuario = usuarios.find(u => u.id === transaccion.usuarioId);
-    
-    // Devolver un nuevo objeto que combine ambos conjuntos de datos
-    return {
-        ...transaccion,
-        usuario: usuario ? {
-            nombrecompleto: usuario.nombrecompleto,
-            email: usuario.email
-        } : null,
-        };
-    });
-
-    // 5. Aplicar la serialización de BigInt
-    const data = JSON.parse(
-        JSON.stringify(dataConDetalles, (key, value) =>
+      const data = JSON.parse(
+        JSON.stringify(transacciones, (key, value) =>
           typeof value === "bigint" ? value.toString() : value
         )
-    );
+      );
 
-    return res.status(200).json(data);
+      return res.status(200).json(data);
     }
 
     // 3. Crear una nueva transacción
