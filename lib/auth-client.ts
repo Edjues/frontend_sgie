@@ -1,11 +1,14 @@
 import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
-  // Esta URL debe ser la de tu BACKEND (donde está instalada la API de better-auth)
-  baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  // Detecta automáticamente si estás en local o en producción
+  baseURL: process.env.NEXT_PUBLIC_APP_URL || 
+           (typeof window !== "undefined" && window.location.origin.includes("localhost") 
+            ? "http://localhost:3000" 
+            : "https://sgie-three.vercel.app"),
   
   fetchOptions: {
-    // IMPORTANTE: Permite el envío de cookies/tokens entre diferentes dominios (CORS)
+    // Necesario para que las cookies de sesión funcionen en ambos entornos
     credentials: "include", 
   },
 });
