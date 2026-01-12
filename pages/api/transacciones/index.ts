@@ -45,6 +45,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prisma";
 import { withAuth } from "@/lib/with-auth";
+import { id } from "zod/v4/locales";
 
 
 export default withAuth(async function handler(req: NextApiRequest, res: NextApiResponse, session: any) {
@@ -57,22 +58,49 @@ export default withAuth(async function handler(req: NextApiRequest, res: NextApi
   try {
     // 2. Obtener datos de la base de datos de todas las transacciones
     if (req.method === "GET") {
+      // const transacciones = await prisma.transaccion.findMany({
+      //   orderBy: { fecha: "desc" },
+      //   include: {
+      //     usuario: {
+      //       select: { nombrecompleto: true, email: true }
+      //     }
+      //   }
+      // });
       const transacciones = await prisma.transaccion.findMany({
-        orderBy: { fecha: "desc" },
-        include: {
-          usuario: {
-            select: { nombrecompleto: true, email: true }
-          }
-        }
+          orderBy: { fecha: "desc" },
       });
+      
+     const uniqueUserIds = [...new Set(transacciones.map(t => t.usuarioId))];
 
-      const data = JSON.parse(
-        JSON.stringify(transacciones, (key, value) =>
+// 3. Consultar los detalles específicos de esos usuarios
+const usuarios = await prisma.usuario.findMany({
+    where: { id: { in: uniqueUserIds } },
+    select: { id: true, nombrecompleto: true, email: true },
+});
+
+// 4. Mapear los resultados para combinar la información
+const dataConDetalles = transacciones.map(transaccion => {
+    // Encontrar el usuario correspondiente a esta transacción
+    const usuario = usuarios.find(u => u.id === transaccion.usuarioId);
+    
+    // Devolver un nuevo objeto que combine ambos conjuntos de datos
+    return {
+        ...transaccion,
+        usuario: usuario ? {
+            nombrecompleto: usuario.nombrecompleto,
+            email: usuario.email
+        } : null,
+        };
+    });
+
+    // 5. Aplicar la serialización de BigInt
+    const data = JSON.parse(
+        JSON.stringify(dataConDetalles, (key, value) =>
           typeof value === "bigint" ? value.toString() : value
         )
-      );
+    );
 
-      return res.status(200).json(data);
+    return res.status(200).json(data);
     }
 
     // 3. Crear una nueva transacción
