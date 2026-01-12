@@ -1,10 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
-import { Wallet, Settings, LogOut, TrendingUp, TrendingDown, LayoutDashboard } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+import { Wallet, LogOut, TrendingUp, TrendingDown } from "lucide-react";
+
 import { authClient } from "@/lib/auth-client";
+import { Sidebar } from "@/components/Sidebar";
+import { auth } from "@/lib/auth";
+
 
 // import { Sidebar } from "@/components/Sidebar";
 
@@ -17,33 +21,20 @@ const data = [
   { name: "Jun", ingresos: 2390, egresos: 3800 },
 ];
 
+
+
 export default function Dashboard() {
   const { data: session } = authClient.useSession();
+  // const session = await auth.api.getSession({ headers: ctx.req.headers });
+
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 flex">
       {/* Sidebar Menu */}
       
       {/* <Sidebar /> */}
-      <aside className="w-64 border-r border-slate-800 hidden md:flex flex-col p-6">
-        <div className="flex items-center gap-2 font-bold text-xl mb-10 text-blue-500">
-          <Wallet className="h-6 w-6" /> SgiE
-        </div>
-        <nav className="space-y-2 flex-1">
-          <Button variant="secondary" className="w-full justify-start gap-3 bg-blue-600/10 text-blue-400 hover:bg-blue-600/20">
-            <LayoutDashboard size={20} /> Dashboard
-          </Button>
-          <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white">
-            <TrendingUp size={20} /> Sistema de gestión I&E 
-          </Button>
-          <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white">
-            <TrendingUp size={20} />  Gestión de usuarios
-          </Button>
-          <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white">
-            <TrendingDown size={20} /> Reporte
-          </Button>
-        </nav>
-      </aside>
+     <Sidebar userRole={'ADMIN'} />
+
 
       {/* Main Content */}
       <main className="flex-1 p-8">
@@ -61,11 +52,6 @@ export default function Dashboard() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-slate-900 border-slate-800 text-slate-100" align="end">
-              <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-slate-800" />
-              <DropdownMenuItem className="gap-2 cursor-pointer hover:bg-slate-800">
-                <Settings size={16} /> Configuración
-              </DropdownMenuItem>
               <DropdownMenuItem 
                 className="gap-2 cursor-pointer text-red-400 hover:bg-red-500/10"
                 onClick={() => authClient.signOut()}

@@ -11,7 +11,7 @@ export default withAuth(async function handler(req: NextApiRequest, res: NextApi
   }
 
   try {
-    // 2. Obtener datos de la base de datos (Ejemplo: Todas las transacciones)
+    // 2. Obtener datos de la base de datos de todas las transacciones
     if (req.method === "GET") {
       const transacciones = await prisma.transaccion.findMany({
         orderBy: { fecha: "desc" },
@@ -22,7 +22,6 @@ export default withAuth(async function handler(req: NextApiRequest, res: NextApi
         }
       });
 
-      // NOTA: Si usas BigInt en tu esquema, debes convertir los datos a String
       const data = JSON.parse(
         JSON.stringify(transacciones, (key, value) =>
           typeof value === "bigint" ? value.toString() : value
